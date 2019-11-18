@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "719248734676",
+    "firebase_url": "https://emr-application.firebaseio.com",
+    "project_id": "emr-application",
+    "storage_bucket": "emr-application.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719248734676:android:08376c3545708b5fd03e41",
+        "android_client_info": {
+          "package_name": "com.example.emrapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719248734676-6l9rak99i4p6afqqrspfvls70v0eots7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.emrapplication",
+            "certificate_hash": "d50ceb7f881f69b51e6dd612ed9c833e79c7b189"
+          }
+        },
+        {
+          "client_id": "719248734676-uf8c2g9di5355r9skj501c1gg96jestk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD75IXmxSMuzPnSm7Bu_IiTG-ssclPFR6Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "719248734676-uf8c2g9di5355r9skj501c1gg96jestk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
