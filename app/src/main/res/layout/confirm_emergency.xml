@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup"
+    android:layout_width="350dp"
+    android:layout_height="350dp"
+    android:layout_gravity="center"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:background="@drawable/popup_background">
+
+
+    <Button
+        android:id="@+id/buttonConfirm"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:background="@color/colorAccent"
+        android:text="CONFIRM EMERGENCY"
+        android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+        android:textSize="36sp" />
+</RelativeLayout>

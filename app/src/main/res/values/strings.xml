@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">EMRapplication</string>
+    <string name="back_button">BACK</string>
+    <string name="save_button">SAVE</string>
 </resources>
