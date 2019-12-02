@@ -1,4 +1,4 @@
-package com.example.emrapplication;
+package com.example.emrapplication.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.example.emrapplication.R;
 
 public class SOS extends AppCompatActivity {
 
@@ -63,7 +65,7 @@ public class SOS extends AppCompatActivity {
                     confirmDialog.dismiss();
 
                     //test code to simply move to the next activity.
-                    Intent i = new Intent(SOS.this,emergency.class);
+                    Intent i = new Intent(SOS.this, Emergency.class);
                     startActivity(i);
                 }
             });

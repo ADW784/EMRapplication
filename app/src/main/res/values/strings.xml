@@ -2,4 +2,21 @@
     <string name="app_name">EMRapplication</string>
     <string name="back_button">BACK</string>
     <string name="save_button">SAVE</string>
+    <string name="button_title_login">LOGIN</string>
+    <string name="text_title_login">Login</string>
+    <string name="placeholder_enter_email_address">Enter Email Address</string>
+    <string name="placeholder_enter_password">Enter Password</string>
+    <string name="placeholder_logo">logo</string>
+    <string name="text_title_no_account_register">Don\'t have an account? Click here to Register</string>
+    <string name="button_title_continue_as_guest">Continue as Guest</string>
+    <string name="text_title_register">Register</string>
+    <string name="text_title_already_registered_login">Already Registered? Login here.</string>
+    <string name="placeholder_first_name">First Name</string>
+    <string name="text_title_Register">Register</string>
+    <string name="placeholder_last_name">Last Name</string>
+    <string name="placeholder_email_address">Email address</string>
+    <string name="placeholder_password">Password</string>
+    <string name="placeholder_confirm_password">Confirm Password</string>
+
+    <string name="registration_error_message">Please fix errors to continue the registration process!</string>
 </resources>
