@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.emrapplication.R;
+import com.example.emrapplication.managers.FirebaseManager;
 
 public class Login extends AppCompatActivity {
 
@@ -28,6 +29,11 @@ public class Login extends AppCompatActivity {
         });
 
         setTitle("Login");
+
+        if(FirebaseManager.getInstance().isLoggedIn()){
+            Intent intent = new Intent(Login.this, SOS.class);
+            startActivity(intent);
+        }
 
     }
 }
