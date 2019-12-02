@@ -61,6 +61,10 @@ public class SOS extends AppCompatActivity {
                     //this is where the application will proceed with sending the data to the database
                     //for now it will just simply close the dialog/popup.
                     confirmDialog.dismiss();
+
+                    //test code to simply move to the next activity.
+                    Intent i = new Intent(SOS.this,emergency.class);
+                    startActivity(i);
                 }
             });
 
