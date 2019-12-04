@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.emrapplication.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SOS extends AppCompatActivity {
 
@@ -20,11 +21,22 @@ public class SOS extends AppCompatActivity {
     ImageButton imageButtonSOS;
     Dialog confirmDialog;
     Button buttonConfirm;
+    Button signoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sos);
+
+        signoutButton = findViewById(R.id.signout_button);
+        signoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(SOS.this, Login.class);
+                startActivity(intent);
+            }
+        });
 
         buttonEditProfile = findViewById(R.id.buttonEditProfile);
         buttonEditProfile.setOnClickListener(new View.OnClickListener() {

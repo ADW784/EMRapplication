@@ -114,7 +114,7 @@ public class Registration extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     String uid = task.getResult().getUser().getUid();
-                    Log.d(TAG, "onComplete: Successfully registered new user with email: " + email);
+                    Log.d(TAG, "onComplete: Successfully registered new user with emailEditText: " + email);
                     Caller caller = new Caller(email, email, uid, firstName, lastName, null, null);
                     addNewCallerToDatabase(caller);
                 } else {
@@ -127,11 +127,12 @@ public class Registration extends AppCompatActivity {
 
     public void addNewCallerToDatabase(final Caller caller) {
 
-        FirebaseManager firebaseManager = FirebaseManager.getInstance();
+        final FirebaseManager firebaseManager = FirebaseManager.getInstance();
         firebaseManager.DATABASE_REFERENCE.child(firebaseManager.USERS_REF).child(caller.uid).setValue(caller).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "onSuccess: Successfully added caller to database: " + caller.toString());
+                firebaseManager.setCurrentUser(caller);
                 Intent intent = new Intent(Registration.this, SOS.class);
                 startActivity(intent);
             }

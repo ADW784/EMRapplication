@@ -25,9 +25,11 @@ public class FirebaseManager {
 
     private static FirebaseManager instance;
     private FirebaseAuth auth;
+    private Caller currentUser = null;
 
     public final DatabaseReference DATABASE_REFERENCE = FirebaseDatabase.getInstance().getReference();
     public final String USERS_REF = "users";
+    public final DatabaseReference USERS_DATABASE_REFERENCE = DATABASE_REFERENCE.child(USERS_REF);
 
     private FirebaseManager(){
         auth = FirebaseAuth.getInstance();
@@ -44,7 +46,13 @@ public class FirebaseManager {
         return auth.getCurrentUser() != null;
     }
 
+    public Caller getCurrentUser() {
+        return currentUser;
+    }
 
+    public void setCurrentUser(Caller currentUser) {
+        this.currentUser = currentUser;
+    }
 
 
 

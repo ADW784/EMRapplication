@@ -7,15 +7,15 @@
     tools:context=".ui.SOS">
 
     <Button
-        android:id="@+id/buttonBack"
+        android:id="@+id/signout_button"
         android:layout_width="106dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:textColor="#FFFFFF"
         android:background="@color/colorPrimary"
-        android:text="@string/back_button"
+        android:text="Sign Out"
+        android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,7 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonBack" />
+        app:layout_constraintTop_toBottomOf="@+id/signout_button" />
 
     <ImageButton
         android:id="@+id/imageButtonSOS"
@@ -47,12 +47,12 @@
         android:layout_marginStart="132dp"
         android:layout_marginLeft="132dp"
         android:layout_marginTop="10dp"
-        android:text="UserID#:"
+        android:text="Welcome"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButtonSOS" />
 
     <TextView
-        android:id="@+id/textViewDisplayUserID"
+        android:id="@+id/firstname_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -86,5 +86,5 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDisplayUserID" />
+        app:layout_constraintTop_toBottomOf="@+id/firstname_textView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
