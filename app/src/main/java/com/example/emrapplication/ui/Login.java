@@ -13,8 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.emrapplication.R;
+import com.example.emrapplication.helpers.AlertHelper;
+import com.example.emrapplication.helpers.Helper;
 import com.example.emrapplication.managers.FirebaseManager;
 import com.example.emrapplication.model.Caller;
+import com.example.emrapplication.presenters.LoginPresenter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,9 +27,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-public class Login extends AppCompatActivity {
+public class Login extends AppCompatActivity implements LoginPresenter.View{
 
     private static final String TAG = "Login";
+
+    private LoginPresenter loginPresenter;
 
     TextView register;
     EditText emailEditText;
@@ -38,6 +43,8 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        loginPresenter = new LoginPresenter(this);
 
         register = findViewById(R.id.register_textView);
         register.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +63,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(validateInputs()) {
-                    signInWith(String.valueOf(emailEditText.getText()), String.valueOf(passwordEditText.getText()));
+                    loginPresenter.signInWith(String.valueOf(emailEditText.getText()), String.valueOf(passwordEditText.getText()));
                 }
             }
         });
@@ -65,7 +72,7 @@ public class Login extends AppCompatActivity {
         guestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signInAsGuest();
+                loginPresenter.signInAsGuest();
             }
         });
 
@@ -78,7 +85,7 @@ public class Login extends AppCompatActivity {
 
     }
 
-
+/*
     private void signInWith(String email, String password) {
 
         //if (validateInputs()) {
@@ -117,7 +124,7 @@ public class Login extends AppCompatActivity {
             }
         });
     }
-
+*/
 
     private boolean validateInputs() {
 
@@ -136,7 +143,7 @@ public class Login extends AppCompatActivity {
         return success;
     }
 
-
+/*
     private void setCurrentUserWithUID(String uid) {
         FirebaseManager.getInstance().USERS_DATABASE_REFERENCE.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -152,11 +159,29 @@ public class Login extends AppCompatActivity {
             }
         });
     }
-
+*/
     private void  goToSOSActivity() {
         Intent intent = new Intent(Login.this, SOS.class);
         startActivity(intent);
     }
 
+    @Override
+    public void onSuccessfulSignIn() {
+        goToSOSActivity();
+    }
 
+    @Override
+    public void onSignInError(String email, String message) {
+        AlertHelper.showSimpleAlertDiag(this, "Sign In Error", message);
+    }
+
+    @Override
+    public void onAnonymousSignInError(String message) {
+        AlertHelper.showSimpleAlertDiag(this, "Sign In Error", "Unable to sign in as guest.\n\n" + message);
+    }
+
+    @Override
+    public void onSuccessfulGuestSignIn() {
+        goToSOSActivity();
+    }
 }
