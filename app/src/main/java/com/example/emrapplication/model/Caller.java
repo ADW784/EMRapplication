@@ -1,5 +1,7 @@
 package com.example.emrapplication.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -34,4 +36,20 @@ public class Caller extends Person {
         return result;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+
+        return
+                "Caller(\n" +
+                        "uid: " + this.uid + ",\n" +
+                        "username: " + this.username + ",\n" +
+                        "email: " + this.email + ",\n" +
+                        "firstName: " + this.firstName + ",\n" +
+                        "lastName: " + this.lastName + ",\n" +
+                        "allergies: " + this.allergies + ",\n" +
+                        "medication: " + this.medication + "\n" +
+                        ")";
+
+    }
 }
