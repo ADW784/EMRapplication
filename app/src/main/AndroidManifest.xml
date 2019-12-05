@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.Emergency"></activity>
-        <activity android:name=".ui.Profile" />
-        <activity android:name=".ui.SOS" />
-        <activity android:name=".ui.Login" >
+        <activity android:name=".ui.EmergencyActivity"></activity>
+        <activity android:name=".ui.EditProfileActivity" />
+        <activity android:name=".ui.SosActivity" />
+        <activity android:name=".ui.LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,8 +20,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.Registration"
-            android:parentActivityName=".ui.Login">
+            android:name=".ui.RegistrationActivity"
+            android:parentActivityName=".ui.LoginActivity">
 
         </activity>
     </application>

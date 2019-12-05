@@ -23,25 +23,36 @@ public class RegistrationPresenter {
 
     private static final String TAG = "MDB:Reg..Presenter";
 
+    private FirebaseManager firebaseManager = FirebaseManager.getInstance();
+
     private View view;
 
     public RegistrationPresenter(View view) { this.view = view; }
 
     public void registerNewCaller(final String email, String password, final String firstName, final String lastName) {
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    String uid = task.getResult().getUser().getUid();
-                    Log.d(TAG, "onComplete: Successfully registered new user with email: " + email);
-                    Caller caller = new Caller(email, email, uid, firstName, lastName, null, null);
-                    addNewCallerToDatabase(caller);
-                } else {
-                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                    view.errorRegisteringUser(email, task.getException().getLocalizedMessage());
+
+        if(firebaseManager.isLoggedInAnonymously()) {
+
+            Caller caller = firebaseManager.getCurrentUser();
+            caller.updateBasicDetails(email,email,firstName,lastName);
+            addNewCallerToDatabase(caller);
+
+        } else {
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        String uid = task.getResult().getUser().getUid();
+                        Log.d(TAG, "onComplete: Successfully registered new user with email: " + email);
+                        Caller caller = new Caller(email, email, uid, firstName, lastName, null, null);
+                        addNewCallerToDatabase(caller);
+                    } else {
+                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                        view.errorRegisteringUser(email, task.getException().getLocalizedMessage());
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     public void addNewCallerToDatabase(final Caller caller) {

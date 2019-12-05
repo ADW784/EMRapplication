@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Profile">
+    tools:context=".ui.EditProfileActivity">
 
     <Button
         android:id="@+id/signout_button"

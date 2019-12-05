@@ -1,12 +1,9 @@
 package com.example.emrapplication.ui;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +14,7 @@ import com.example.emrapplication.R;
 import com.example.emrapplication.helpers.AlertHelper;
 import com.example.emrapplication.presenters.RegistrationPresenter;
 
-public class Registration extends AppCompatActivity implements RegistrationPresenter.View {
+public class RegistrationActivity extends AppCompatActivity implements RegistrationPresenter.View {
 
     Button buttonRegister;
     TextView textViewLoginLink;
@@ -28,7 +25,7 @@ public class Registration extends AppCompatActivity implements RegistrationPrese
     EditText password;
     EditText confirmPassword;
 
-    private static final String TAG = "Registration";
+    private static final String TAG = "RegistrationActivity";
 
     private RegistrationPresenter registrationPresenter;
 
@@ -51,7 +48,7 @@ public class Registration extends AppCompatActivity implements RegistrationPrese
         password = findViewById(R.id.editTextPassword);
         confirmPassword = findViewById(R.id.editTextConfirmPassword);
 
-        setTitle("Registration");
+        setTitle("RegistrationActivity");
 
     }
 
@@ -90,7 +87,7 @@ public class Registration extends AppCompatActivity implements RegistrationPrese
     View.OnClickListener goToLoginActivity = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent i = new Intent(Registration.this,Login.class);
+            Intent i = new Intent(RegistrationActivity.this, LoginActivity.class);
             startActivity(i);
         }
     };
@@ -101,14 +98,14 @@ public class Registration extends AppCompatActivity implements RegistrationPrese
             if(validateInputs()) {
                 registrationPresenter.registerNewCaller(String.valueOf(email.getText()), String.valueOf(password.getText()), String.valueOf(firstName.getText()), String.valueOf(lastName.getText()));
             } else {
-                Toast.makeText(Registration.this, R.string.registration_error_message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegistrationActivity.this, R.string.registration_error_message, Toast.LENGTH_SHORT).show();
             }
         }
     };
 
     @Override
     public void successfullyRegisteredUser() {
-        Intent intent = new Intent(Registration.this, SOS.class);
+        Intent intent = new Intent(RegistrationActivity.this, SosActivity.class);
         startActivity(intent);
     }
 

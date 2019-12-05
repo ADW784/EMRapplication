@@ -22,6 +22,22 @@ public class Caller extends Person {
         this.medication = medication;
     }
 
+    public void update(String username, String email, String firstName, String lastName, Set<String> allergies, Set<String> medication){
+        this.username = username;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.allergies = allergies;
+        this.medication = medication;
+    }
+
+    public void updateBasicDetails(String username, String email, String firstName, String lastName){
+        this.username = username;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
 

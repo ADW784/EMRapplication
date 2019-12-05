@@ -1,13 +1,11 @@
 package com.example.emrapplication.presenters;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.emrapplication.managers.FirebaseManager;
 import com.example.emrapplication.model.Caller;
-import com.example.emrapplication.ui.Login;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -18,6 +16,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoginPresenter {
+
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseManager firebaseManager = FirebaseManager.getInstance();
 
     public interface View {
         void onSuccessfulSignIn();
@@ -35,7 +36,7 @@ public class LoginPresenter {
 
     public void signInWith(final String email, String password) {
 
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
@@ -52,20 +53,41 @@ public class LoginPresenter {
     }
 
     public void signInAsGuest() {
-        FirebaseAuth.getInstance().signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    FirebaseUser user = task.getResult().getUser();
-                    Log.d(TAG, "signInAsGuest:onComplete: Successfully signed in with anonymous user: " + user);
-                    createUserFromAnonymousSignIn(user);
-                    view.onSuccessfulGuestSignIn();
-                } else {
-                    Log.w(TAG, "signInAsGuest:createUserWithEmail:failure", task.getException());
-                    view.onAnonymousSignInError(task.getException().getLocalizedMessage());
-                }
+        if(auth.getCurrentUser() != null) {
+            if(auth.getCurrentUser().isAnonymous()){
+                view.onSuccessfulGuestSignIn();
+            } else {
+                auth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()) {
+                            FirebaseUser user = task.getResult().getUser();
+                            Log.d(TAG, "signInAsGuest:onComplete: Successfully signed in with anonymous user: " + user);
+                            createUserFromAnonymousSignIn(user);
+                            view.onSuccessfulGuestSignIn();
+                        } else {
+                            Log.w(TAG, "signInAsGuest:createUserWithEmail:failure", task.getException());
+                            view.onAnonymousSignInError(task.getException().getLocalizedMessage());
+                        }
+                    }
+                });
             }
-        });
+        } else {
+            auth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()) {
+                        FirebaseUser user = task.getResult().getUser();
+                        Log.d(TAG, "signInAsGuest:onComplete: Successfully signed in with anonymous user: " + user);
+                        createUserFromAnonymousSignIn(user);
+                        view.onSuccessfulGuestSignIn();
+                    } else {
+                        Log.w(TAG, "signInAsGuest:createUserWithEmail:failure", task.getException());
+                        view.onAnonymousSignInError(task.getException().getLocalizedMessage());
+                    }
+                }
+            });
+        }
     }
 
     private void createUserFromAnonymousSignIn(final FirebaseUser user) {
@@ -89,7 +111,7 @@ public class LoginPresenter {
         });
     }
 
-    private void setCurrentUserWithUID(String uid) {
+    public void setCurrentUserWithUID(String uid) {
 
         FirebaseManager.getInstance().USERS_DATABASE_REFERENCE.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
 
