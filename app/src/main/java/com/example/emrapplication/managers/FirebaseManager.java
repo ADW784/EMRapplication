@@ -16,8 +16,15 @@ public class FirebaseManager {
     private Caller currentUser = null;
 
     public final DatabaseReference DATABASE_REFERENCE = FirebaseDatabase.getInstance().getReference();
+
     public final String USERS_REF = "users";
     public final DatabaseReference USERS_DATABASE_REFERENCE = DATABASE_REFERENCE.child(USERS_REF);
+
+    public final String EMERGENCIES_REF = "emergencies";
+    public final String ACTIVE_EMERGENCIES_REF = "active_emergencies";
+    public final DatabaseReference ACTIVE_EMERGENCIES_DATABASE_REFERENCE = DATABASE_REFERENCE.child(ACTIVE_EMERGENCIES_REF);
+    public final String EMERGENCY_HISTORY_REF = "emergency_history";
+    public final DatabaseReference EMERGENCY_HISTORY_DATABASE_REFERENCE = DATABASE_REFERENCE.child(EMERGENCY_HISTORY_REF);
 
     private FirebaseManager(){
         auth = FirebaseAuth.getInstance();
@@ -57,5 +64,7 @@ public class FirebaseManager {
 
         return false;
     }
+
+
 
 }

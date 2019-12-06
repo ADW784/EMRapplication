@@ -57,14 +57,14 @@ public class Caller extends Person {
     public String toString() {
 
         return
-                "Caller(\n" +
-                        "uid: " + this.uid + ",\n" +
-                        "username: " + this.username + ",\n" +
-                        "email: " + this.email + ",\n" +
-                        "firstName: " + this.firstName + ",\n" +
-                        "lastName: " + this.lastName + ",\n" +
-                        "allergies: " + this.allergies + ",\n" +
-                        "medication: " + this.medication + "\n" +
+                "Caller(" +
+                        "uid: " + this.uid + ", " +
+                        "username: " + this.username + ", " +
+                        "email: " + this.email + ", " +
+                        "firstName: " + this.firstName + ", " +
+                        "lastName: " + this.lastName + ", " +
+                        "allergies: " + this.allergies + ", " +
+                        "medication: " + this.medication + "" +
                         ")";
 
     }

@@ -26,4 +26,13 @@
     <string name="button_tittle_edit_profile">Edit Profile</string>
     <string name="placeholder_text_enter_emergency_description">enter emergency description</string>
     <string name="placeholder_sos">sos</string>
+    <string name="text_title_emergency">Emergency</string>
+    <string name="text_title_reported_at">Reported At:</string>
+    <string name="placeholder_date">2019-12-12</string>
+    <string name="text_title_status">Status</string>
+    <string name="placeholder_response">Awaiting Response</string>
+    <string name="text_title_emergency_description">Emergency Description</string>
+    <string name="placeholder_this_is_an_example_emergency">This is an example emergency</string>
+    <string name="placeholder_responder_info">Responder\'s name is Tom. Tom is 200m away.</string>
+    <string name="button_title_cancel_emergency">cancel emergency</string>
 </resources>
