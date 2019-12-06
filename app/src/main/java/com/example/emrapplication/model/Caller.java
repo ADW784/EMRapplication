@@ -9,26 +9,31 @@ import java.util.Set;
 public class Caller extends Person {
     public String firstName;
     public String lastName;
-    public Set<String> allergies;
-    public Set<String> medication;
+    public String allergies;
+    public String medication;
+    public String doctor;
+    public Emergency emergency;
 
     public Caller() {};
 
-    public Caller(String username, String email, String uid, String firstName, String lastName, Set<String> allergies, Set<String> medication) {
+    public Caller(String username, String email, String uid, String firstName, String lastName, String allergies, String medication, String doctor, Emergency emergency) {
         super(username, email, uid);
         this.firstName = firstName;
         this.lastName = lastName;
         this.allergies = allergies;
         this.medication = medication;
+        this.doctor = doctor;
+        this.emergency = emergency;
     }
 
-    public void update(String username, String email, String firstName, String lastName, Set<String> allergies, Set<String> medication){
+    public void update(String username, String email, String firstName, String lastName, String allergies, String medication, String doctor){
         this.username = username;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.allergies = allergies;
         this.medication = medication;
+        this.doctor = doctor;
     }
 
     public void updateBasicDetails(String username, String email, String firstName, String lastName){
@@ -48,6 +53,8 @@ public class Caller extends Person {
         result.put("lastName", lastName);
         result.put("allergies", allergies);
         result.put("medication", medication);
+        result.put("doctor", doctor);
+        if(emergency != null) { result.put("emergency", emergency.toMap()); }
 
         return result;
     }
@@ -64,7 +71,9 @@ public class Caller extends Person {
                         "firstName: " + this.firstName + ", " +
                         "lastName: " + this.lastName + ", " +
                         "allergies: " + this.allergies + ", " +
-                        "medication: " + this.medication + "" +
+                        "medication: " + this.medication + ", " +
+                        "doctor: " + this.doctor + ", " +
+                        "emergency: " + this.emergency +
                         ")";
 
     }

@@ -2,7 +2,7 @@ package com.example.emrapplication.model;
 
 public enum EmergencyStatus {
 
-    CREATED("created"), INPROGRESS("in_progress"), RESOLVED("resolved");
+    CREATED("Awaiting response."), INPROGRESS("Response in progress."), RESOLVED("Resolved"), CANCELLED("Cancelled");
 
     private String status;
 

@@ -13,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +47,7 @@ public class SosPresenter {
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(firebaseManager.ACTIVE_EMERGENCIES_REF + "/" + emergencyId, emergencyMapped);
-        childUpdates.put(firebaseManager.USERS_REF + "/" + currentUid + "/" + firebaseManager.EMERGENCIES_REF, emergencyMapped);
+        childUpdates.put(firebaseManager.USERS_REF + "/" + currentUid + "/" + firebaseManager.EMERGENCY_REF, emergencyMapped);
 
         firebaseManager.DATABASE_REFERENCE.updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
             @Override
