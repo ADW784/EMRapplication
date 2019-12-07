@@ -11,6 +11,8 @@ public class Responder extends Person {
     public String lastName;
     public CustomLocation currentLocation;
 
+    public Responder() {}
+
     public Responder(String firstName, String lastName, CustomLocation location) {
         this.firstName = firstName;
         this.lastName = lastName;

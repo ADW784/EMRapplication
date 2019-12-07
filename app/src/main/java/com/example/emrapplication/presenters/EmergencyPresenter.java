@@ -9,11 +9,13 @@ import com.example.emrapplication.managers.FirebaseManager;
 import com.example.emrapplication.model.CustomLocation;
 import com.example.emrapplication.model.Emergency;
 import com.example.emrapplication.model.EmergencyStatus;
+import com.example.emrapplication.model.Responder;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 public class EmergencyPresenter {
@@ -22,6 +24,7 @@ public class EmergencyPresenter {
     public interface View {
         void didRetrieveEmergencyDetails(Emergency emergency);
         void didArchiveEmergency(Emergency emergency);
+        //void didUpdateResponder(Responder responder);
         void didRemoveEmergencyFromActiveList(Emergency emergency);
         void didRemoveEmergencyFromUser(Emergency emergency);
         void errorRemovingEmergencyFromUser(String message);
@@ -36,6 +39,7 @@ public class EmergencyPresenter {
 
     private FirebaseManager firebaseManager = FirebaseManager.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
+    //private DatabaseReference currentCaller;
 
     private ValueEventListener userEmergencyListener = new ValueEventListener() {
         @Override
@@ -60,6 +64,18 @@ public class EmergencyPresenter {
             }
 
         }
+
+//        private ValueEventListener responderListener = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        };
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -163,5 +179,31 @@ public class EmergencyPresenter {
 
 
 
+    public void updateResponder(Responder responder){
+        firebaseManager.getRefForCurrentUser().child(firebaseManager.EMERGENCY_REF).child("responder").setValue(responder)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "updateResponder:onSuccess: ");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "updateResponder:onFailure: " + e.getMessage());
+            }
+        });
+    }
+
+    public void testResponse() {
+        CustomLocation location = new CustomLocation("test");
+        location.setLatitude(13);
+        location.setLongitude(-59);
+
+        Responder responder = new Responder("Tom", "Keen", location);
+
+        updateResponder(responder);
+
+        upDateEmergencyStatusForCurrentUser(EmergencyStatus.INPROGRESS);
+    }
 
 }

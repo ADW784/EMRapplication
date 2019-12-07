@@ -69,6 +69,12 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
 
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        locationPresenter.stopLocationUpdates();
+    }
+
     private void updateUI(Emergency emergency) {
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -80,10 +86,18 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
 
         String responderInfo = "";
 
+
         if(emergency.responder != null) {
 
             if(emergency.responder.firstName != null){
                 responderInfo = emergency.responder.firstName + " has responded to your emergency.";
+
+                if(emergency.responder.currentLocation != null && emergency.location != null) {
+                    Float distance = emergency.location.distanceTo(emergency.responder.currentLocation);
+                    Float distanceInKm = distance/1000;
+                    String stringDistance = String.format("%1.2f", distanceInKm);
+                    responderInfo += " " + emergency.responder.firstName + " is " + stringDistance + "km away.";
+                }
             }
         }
 
@@ -139,7 +153,9 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
 
     @Override
     public void didGetLastLocation(Location location) {
-        emergencyPresenter.updateEmergencyLocation(location);
+        if(currentEmergency != null && currentEmergency.id != null) {
+            emergencyPresenter.updateEmergencyLocation(location);
+        }
     }
 
     @Override
