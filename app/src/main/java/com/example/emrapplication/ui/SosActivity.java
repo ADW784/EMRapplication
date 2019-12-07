@@ -246,11 +246,26 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "onRequestPermissionsResult: permission granted, get location.");
-            locationPresenter.getLastLocation();
-        } else {
-            showPermissionAlert();
+        Log.d(TAG, "onRequestPermissionsResult: request code:" + requestCode);
+        for(int result: grantResults) {
+            Log.d(TAG, "onRequestPermissionsResult: GrantResult: " + result);
+        }
+        if(requestCode == Constants.PERMISSIONS_REQUEST_ACCESS_LOCATION) {
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "onRequestPermissionsResult: permission granted, get location.");
+                locationPresenter.getLastLocation();
+            } else {
+                Log.d(TAG, "onRequestPermissionsResult: permission not granted, showing alert. grant results: " + grantResults );
+                //showPermissionAlert();
+            }
+        } else if(requestCode == Constants.PERMISSIONS_REQUEST_ACCESS_BACKGROUND_LOCATION) {
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "onRequestPermissionsResult: permission granted for background location.");
+                locationPresenter.getLastLocation();
+            } else {
+                Log.d(TAG, "onRequestPermissionsResult: background permission not granted, showing alert.");
+                //showPermissionAlert();
+            }
         }
     }
 

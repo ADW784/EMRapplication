@@ -35,4 +35,10 @@
     <string name="placeholder_this_is_an_example_emergency">This is an example emergency</string>
     <string name="placeholder_responder_info">Responder\'s name is Tom. Tom is 200m away.</string>
     <string name="button_title_cancel_emergency">cancel emergency</string>
+    <string name="text_title_update_profile">Update Profile</string>
+    <string name="placeholder_medication">Enter any medication being taken</string>
+    <string name="placeholder_allergies">Enter any allergies</string>
+    <string name="placeholder_doctor">Doctor\'s name</string>
+    <string name="button_title_update_profile">Update Profile</string>
+    <string name="button_title_cancel_update">Cancel Update</string>
 </resources>

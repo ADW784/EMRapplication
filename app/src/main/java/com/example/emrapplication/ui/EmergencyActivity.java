@@ -2,6 +2,7 @@ package com.example.emrapplication.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
@@ -106,7 +107,11 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
     }
 
     private void goBackToSosActivity() {
-        onBackPressed();
+
+        //onBackPressed();
+        Intent intent = new Intent(EmergencyActivity.this, SosActivity.class);
+        startActivity(intent);
+
     }
 
     @Override

@@ -6,10 +6,16 @@ import androidx.annotation.NonNull;
 
 import com.example.emrapplication.managers.FirebaseManager;
 import com.example.emrapplication.model.Caller;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserInfoPresenter {
 
@@ -56,6 +62,35 @@ public class UserInfoPresenter {
         }
 
     }
+
+
+
+
+    public void updateCallerProfile(final Caller caller) {
+        DatabaseReference userRef = firebaseManager.USERS_DATABASE_REFERENCE.child(caller.uid);
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        if(caller.firstName != null && !caller.firstName.isEmpty()) { childUpdates.put("firstName", caller.firstName); }
+        if(caller.lastName != null && !caller.lastName.isEmpty()) { childUpdates.put("lastName", caller.lastName); }
+        if(caller.allergies != null && !caller.allergies.isEmpty()) { childUpdates.put("allergies", caller.allergies); }
+        if(caller.medication != null && !caller.medication.isEmpty()) { childUpdates.put("medication", caller.medication); }
+        if(caller.doctor != null && !caller.doctor.isEmpty()) { childUpdates.put("doctor", caller.doctor); }
+
+        userRef.updateChildren(childUpdates)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "updateCallerProfile:onSuccess: " + caller);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "updateCallerProfile:onFailure: " + e.getMessage());
+                    }
+                });
+    }
+
 }
 
 

@@ -10,6 +10,8 @@ import com.example.emrapplication.managers.FirebaseManager;
 import com.example.emrapplication.model.CustomLocation;
 import com.example.emrapplication.model.Emergency;
 import com.example.emrapplication.model.EmergencyStatus;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,18 +54,34 @@ public class SosPresenter {
         childUpdates.put(firebaseManager.ACTIVE_EMERGENCIES_REF + "/" + emergencyId, emergencyMapped);
         childUpdates.put(firebaseManager.USERS_REF + "/" + currentUid + "/" + firebaseManager.EMERGENCY_REF, emergencyMapped);
 
-        firebaseManager.DATABASE_REFERENCE.updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                Log.d(TAG, "createNewEmergency:onComplete: database reference: " + databaseReference);
-                if(databaseError != null) {
-                    Log.d(TAG, "createNewEmergency:onComplete: error creating emergencies: " + databaseError.getMessage());
-                    view.errorCreatingEmergency(databaseError.getMessage());
-                } else {
-                    view.didCreateEmergency(emergency);
-                }
-            }
-        });
+        firebaseManager.DATABASE_REFERENCE.updateChildren(childUpdates)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "createNewEmergency:onSuccess: ");
+                        view.didCreateEmergency(emergency);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "createNewEmergency:onFailure: " + e.getMessage());
+                        view.errorCreatingEmergency(e.getLocalizedMessage());
+                    }
+                });
+
+//        firebaseManager.DATABASE_REFERENCE.updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
+//            @Override
+//            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+//                Log.d(TAG, "createNewEmergency:onComplete: database reference: " + databaseReference);
+//                if(databaseError != null) {
+//                    Log.d(TAG, "createNewEmergency:onComplete: error creating emergencies: " + databaseError.getMessage());
+//                    view.errorCreatingEmergency(databaseError.getMessage());
+//                } else {
+//                    view.didCreateEmergency(emergency);
+//                }
+//            }
+//        });
 
     }
 

@@ -43,6 +43,14 @@ public class Caller extends Person {
         this.lastName = lastName;
     }
 
+    public void updateProfile(String firstName, String lastName, String allergies, String medication, String doctor){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.allergies = allergies;
+        this.medication = medication;
+        this.doctor = doctor;
+    }
+
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
 
