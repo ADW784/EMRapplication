@@ -38,17 +38,25 @@ public class EmergencyPresenter {
     private ValueEventListener userEmergencyListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//            Log.d(TAG, "userEmergencyListener:onDataChange: snapshot: " + dataSnapshot);
+//            Log.d(TAG, "userEmergencyListener:onDataChange: snapshot exists: " + dataSnapshot.exists());
+//            Log.d(TAG, "userEmergencyListener:onDataChange: result" + dataSnapshot.getValue());
             Emergency emergency = dataSnapshot.getValue(Emergency.class);
             Log.d(TAG, "userEmergencyListener:onDataChange: emergency: " + emergency);
-            view.didRetrieveEmergencyDetails(emergency);
+            if(emergency != null && emergency.id != null) {
+                view.didRetrieveEmergencyDetails(emergency);
 
-            if(emergency.status.equals(EmergencyStatus.INPROGRESS.toString())){
-                removeEmergencyFromActiveList(emergency);
-            } else if(emergency.status.equals(EmergencyStatus.CANCELLED.toString()) || emergency.status.equals(EmergencyStatus.RESOLVED.toString())){
-                archiveEmergency(emergency);
-                removeEmergencyFromActiveList(emergency);
-                removeEmergencyFromUser(emergency);
+                if(emergency.status.equals(EmergencyStatus.INPROGRESS.toString())){
+                    removeEmergencyFromActiveList(emergency);
+                } else if(emergency.status.equals(EmergencyStatus.CANCELLED.toString()) || emergency.status.equals(EmergencyStatus.RESOLVED.toString())){
+                    archiveEmergency(emergency);
+                    removeEmergencyFromActiveList(emergency);
+                    removeEmergencyFromUser(emergency);
+                }
+            } else {
+                Log.d(TAG, "userEmergencyListener:onDataChange: emergency is null, check programming logic!");
             }
+
         }
 
         @Override
@@ -61,7 +69,24 @@ public class EmergencyPresenter {
     public EmergencyPresenter(View view) { this.view = view; }
 
     public void getEmergencyDetailsForCurrentUser() {
-        firebaseManager.getRefForCurrentUser().addValueEventListener(userEmergencyListener);
+        firebaseManager.getRefForCurrentUser().child(firebaseManager.EMERGENCY_REF).addValueEventListener(userEmergencyListener);
+    }
+
+    public void upDateEmergencyStatusForCurrentUser(final EmergencyStatus status){
+        firebaseManager.getRefForCurrentUser().child(firebaseManager.EMERGENCY_REF).child("status")
+                .setValue(status.toString())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "upDateEmergencyStatusForCurrentUser:onSuccess: status: " + status.toString());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "upDateEmergencyStatusForCurrentUser:onFailure: error: " + e.getMessage());
+                    }
+                });
     }
 
     public void removeEmergencyFromActiveList(final Emergency emergency) {

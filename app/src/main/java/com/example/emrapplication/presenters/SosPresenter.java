@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.emrapplication.managers.FirebaseManager;
+import com.example.emrapplication.model.CustomLocation;
 import com.example.emrapplication.model.Emergency;
 import com.example.emrapplication.model.EmergencyStatus;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,7 +41,9 @@ public class SosPresenter {
 
         String currentUid = auth.getCurrentUser().getUid();
 
-        final Emergency emergency = new Emergency(emergencyId, date.getTime(), currentUid, null, description, EmergencyStatus.CREATED, location);
+        CustomLocation customLocation = new CustomLocation(location);
+
+        final Emergency emergency = new Emergency(emergencyId, date.getTime(), currentUid, null, description, EmergencyStatus.CREATED, customLocation);
 
         Map<String, Object> emergencyMapped = emergency.toMap();
 

@@ -18,11 +18,11 @@ public class Emergency {
     /*public double latitude;
     public double longitude;
     public double altitude;*/
-    public Location location;
+    public CustomLocation location;
 
     public Emergency() {}
 
-    public Emergency(String id, Long timestamp, String callerId, Responder responder, String description, String status, Location location/*, double latitude, double longitude, double altitude*/) {
+    public Emergency(String id, Long timestamp, String callerId, Responder responder, String description, String status, CustomLocation location/*, double latitude, double longitude, double altitude*/) {
         this.id = id;
         this.timestamp = timestamp;
         this.callerId = callerId;
@@ -35,7 +35,7 @@ public class Emergency {
         this.location = location;
     }
 
-    public Emergency(String id, Long timestamp, String callerId, Responder responder, String description, EmergencyStatus status, Location location/*, double latitude, double longitude, double altitude*/) {
+    public Emergency(String id, Long timestamp, String callerId, Responder responder, String description, EmergencyStatus status, CustomLocation location/*, double latitude, double longitude, double altitude*/) {
         this.id = id;
         this.timestamp = timestamp;
         this.callerId = callerId;

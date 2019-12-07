@@ -9,9 +9,9 @@ public class Responder extends Person {
 
     public String firstName;
     public String lastName;
-    public Location currentLocation;
+    public CustomLocation currentLocation;
 
-    public Responder(String firstName, String lastName, Location location) {
+    public Responder(String firstName, String lastName, CustomLocation location) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.currentLocation = location;

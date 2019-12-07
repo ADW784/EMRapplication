@@ -73,7 +73,7 @@ public class RegistrationPresenter {
                     if (task.isSuccessful()) {
                         String uid = task.getResult().getUser().getUid();
                         Log.d(TAG, "registerNewCaller:createUserWithEmail:onComplete: Successfully registered new user with email: " + email);
-                        Caller caller = new Caller(email, email, uid, firstName, lastName, null, null);
+                        Caller caller = new Caller(email, email, uid, firstName, lastName, null, null, null, null);
                         addNewCallerToDatabase(caller);
                     } else {
                         Log.w(TAG, "registerNewCaller:createUserWithEmail:failure", task.getException());

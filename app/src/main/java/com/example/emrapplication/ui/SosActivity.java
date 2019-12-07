@@ -101,6 +101,8 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sos);
 
+        checkLoginStatus();
+
         sosPresenter = new SosPresenter(this);
         userInfoPresenter = new UserInfoPresenter(this);
 
@@ -133,6 +135,7 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
         locationPresenter = new LocationPresenter(this, this);
         locationPresenter.getLastLocation();
 
+        setTitle("SOS");
 
     }
 
@@ -147,14 +150,16 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
 
     private void setButtonVisibility() {
 
-        if(FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
-            signoutButton.setVisibility(View.GONE);
-            buttonEditProfile.setVisibility(View.GONE);
-            registerButton.setVisibility(View.VISIBLE);
-        } else {
-            signoutButton.setVisibility(View.VISIBLE);
-            buttonEditProfile.setVisibility(View.VISIBLE);
-            registerButton.setVisibility(View.GONE);
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            if(FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
+                signoutButton.setVisibility(View.GONE);
+                buttonEditProfile.setVisibility(View.GONE);
+                registerButton.setVisibility(View.VISIBLE);
+            } else {
+                signoutButton.setVisibility(View.VISIBLE);
+                buttonEditProfile.setVisibility(View.VISIBLE);
+                registerButton.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -223,6 +228,13 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
         startActivity(intent);
     }
 
+
+    private void checkLoginStatus() {
+        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+            Intent intent = new Intent(SosActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+    }
 
     // MARK: - Implement ActivityCompat.OnRequestPermissionsResultCallback Methods
 

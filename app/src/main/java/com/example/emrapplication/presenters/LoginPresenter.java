@@ -91,7 +91,7 @@ public class LoginPresenter {
     }
 
     private void createUserFromAnonymousSignIn(final FirebaseUser user) {
-        final Caller caller = new Caller(user.getEmail(), user.getEmail(), user.getUid(), null, null, null,null);
+        final Caller caller = new Caller(user.getEmail(), user.getEmail(), user.getUid(), null, null, null,null, null, null);
         FirebaseManager.getInstance().USERS_DATABASE_REFERENCE.child(user.getUid()).setValue(caller).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
