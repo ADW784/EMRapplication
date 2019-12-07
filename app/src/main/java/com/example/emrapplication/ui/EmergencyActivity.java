@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class EmergencyActivity extends AppCompatActivity implements EmergencyPresenter.View, LocationPresenter.LocationListener {
+
+    private static final String TAG = "MDB:EmergencyActivity";
 
     EmergencyPresenter emergencyPresenter;
     Emergency currentEmergency;
@@ -74,6 +77,13 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
     protected void onStop() {
         super.onStop();
         locationPresenter.stopLocationUpdates();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Log.d(TAG, "onBackPressed: Override this to do nothing.");
     }
 
     private void updateUI(Emergency emergency) {

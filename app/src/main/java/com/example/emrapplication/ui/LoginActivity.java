@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity implements LoginPresenter.View{
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "MDB:LoginActivity";
 
     private LoginPresenter loginPresenter;
 

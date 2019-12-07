@@ -151,6 +151,12 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Log.d(TAG, "onBackPressed: Override this to do nothing.");
+    }
+
     // MARK: - Class Methods
 
     private void setButtonVisibility() {
