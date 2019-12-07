@@ -48,7 +48,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         password = findViewById(R.id.editTextPassword);
         confirmPassword = findViewById(R.id.editTextConfirmPassword);
 
-        setTitle("RegistrationActivity");
+        setTitle("Registration");
 
     }
 

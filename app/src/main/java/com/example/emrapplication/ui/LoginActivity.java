@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.V
         });
 
 
-        setTitle("LoginActivity");
+        setTitle("Login");
 
         if(firebaseManager.isLoggedIn()){
             loginPresenter.setCurrentUserWithUID(FirebaseAuth.getInstance().getUid());
