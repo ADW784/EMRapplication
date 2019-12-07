@@ -2,6 +2,7 @@ package com.example.emrapplication.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,18 +13,20 @@ import com.example.emrapplication.model.Caller;
 import com.example.emrapplication.model.Emergency;
 import com.example.emrapplication.model.EmergencyStatus;
 import com.example.emrapplication.presenters.EmergencyPresenter;
+import com.example.emrapplication.presenters.LocationPresenter;
 import com.example.emrapplication.presenters.UserInfoPresenter;
+import com.google.android.gms.location.LocationResult;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class EmergencyActivity extends AppCompatActivity implements EmergencyPresenter.View {
+public class EmergencyActivity extends AppCompatActivity implements EmergencyPresenter.View, LocationPresenter.LocationListener {
 
     EmergencyPresenter emergencyPresenter;
     Emergency currentEmergency;
+    LocationPresenter locationPresenter;
 
-    // TODO: - Add UI Elements and complete updateUI function and go back to SOS function
     TextView timestampTextView;
     TextView statusTextView;
     TextView descriptionTextView;
@@ -44,6 +47,9 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
 
         emergencyPresenter = new EmergencyPresenter(this);
         emergencyPresenter.getEmergencyDetailsForCurrentUser();
+
+        locationPresenter = new LocationPresenter(this, this);
+        locationPresenter.checkLocationSettingsAndStartUpdates(this);
 
         timestampTextView = findViewById(R.id.timestamp_textView);
         statusTextView = findViewById(R.id.status_textView);
@@ -127,6 +133,27 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
 
     @Override
     public void errorRemovingEmergencyFromActiveList(String message) {
+
+    }
+
+
+    @Override
+    public void didGetLastLocation(Location location) {
+        emergencyPresenter.updateEmergencyLocation(location);
+    }
+
+    @Override
+    public void didFailToGetLastLocation(String message) {
+
+    }
+
+    @Override
+    public void requestLocationPermission() {
+
+    }
+
+    @Override
+    public void didUpdateLocation(LocationResult locationResult) {
 
     }
 }

@@ -28,6 +28,10 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyC9_lhie22nq3YsTgKg6MiPu6D-imOgau8"/>
+
+        <!--<service
+            android:name=".FetchAddressIntentService"
+            android:exported="false"/>-->
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>

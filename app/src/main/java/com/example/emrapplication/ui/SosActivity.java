@@ -1,6 +1,7 @@
 package com.example.emrapplication.ui;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -24,24 +25,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.emrapplication.R;
-import com.example.emrapplication.helpers.AlertHelper;
-import com.example.emrapplication.managers.FirebaseManager;
+import com.example.emrapplication.managers.Constants;
 import com.example.emrapplication.model.Caller;
 import com.example.emrapplication.model.Emergency;
 import com.example.emrapplication.presenters.LocationPresenter;
 import com.example.emrapplication.presenters.SosPresenter;
 import com.example.emrapplication.presenters.UserInfoPresenter;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.location.LocationResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SosActivity extends AppCompatActivity implements SosPresenter.View, UserInfoPresenter.View, LocationPresenter.LocationListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -146,6 +137,20 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
         userInfoPresenter.getCurrentUser();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Check which request we're responding to
+        if (requestCode == Constants.REQUEST_CHECK_SETTINGS) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Log.d(TAG, "onActivityResult: intent data for request check settings: " + data.getDataString());
+            } else {
+                Log.d(TAG, "onActivityResult: result code not ok! intent data for request check settings: " + data.getDataString());
+            }
+        }
+    }
+
     // MARK: - Class Methods
 
     private void setButtonVisibility() {
@@ -214,7 +219,7 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
         builder.setPositiveButton("Grant Access", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ActivityCompat.requestPermissions(SosActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                ActivityCompat.requestPermissions(SosActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION}, Constants.PERMISSIONS_REQUEST_ACCESS_LOCATION);
             }
         });
 
@@ -275,11 +280,29 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
                 showPermissionAlert();
 
             } else {
-                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                ActivityCompat.requestPermissions(SosActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION}, Constants.PERMISSIONS_REQUEST_ACCESS_LOCATION);
 
             }
 
+        } else {
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // check if you need to show rational behind asking for permission
+                if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+
+                    Log.d(TAG, "requestPermission: show permission alert");
+                    showPermissionAlert();
+
+                } else {
+                    ActivityCompat.requestPermissions(SosActivity.this, new String[] {Manifest.permission.ACCESS_BACKGROUND_LOCATION}, Constants.PERMISSIONS_REQUEST_ACCESS_LOCATION);
+
+                }
+            }
         }
+    }
+
+    @Override
+    public void didUpdateLocation(LocationResult locationResult) {
+
     }
 
     // MARK: - Implement SosPresenter Methods

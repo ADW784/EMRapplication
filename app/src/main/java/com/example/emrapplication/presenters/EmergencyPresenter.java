@@ -1,10 +1,12 @@
 package com.example.emrapplication.presenters;
 
+import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.example.emrapplication.managers.FirebaseManager;
+import com.example.emrapplication.model.CustomLocation;
 import com.example.emrapplication.model.Emergency;
 import com.example.emrapplication.model.EmergencyStatus;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -139,6 +141,22 @@ public class EmergencyPresenter {
             public void onFailure(@NonNull Exception e) {
                 Log.d(TAG, "removeEmergencyFromUser:onFailure: error:" + e.getMessage());
                 view.errorRemovingEmergencyFromUser(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    public void updateEmergencyLocation(Location location){
+
+        firebaseManager.getRefForCurrentUser().child(firebaseManager.EMERGENCY_REF).child("location").setValue(new CustomLocation(location))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "updateEmergencyLocation:onSuccess: ");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "updateEmergencyLocation:onFailure: " + e.getMessage());
             }
         });
     }
