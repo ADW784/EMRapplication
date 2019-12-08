@@ -7,14 +7,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.emrapplication.managers.FirebaseManager;
+import com.example.emrapplication.model.Caller;
 import com.example.emrapplication.model.CustomLocation;
 import com.example.emrapplication.model.Emergency;
 import com.example.emrapplication.model.EmergencyStatus;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -25,6 +28,7 @@ public class SosPresenter {
     public interface View {
         void didCreateEmergency(Emergency emergency);
         void errorCreatingEmergency(String message);
+        void emergencyExistsForCurrentUser(Emergency emergency);
     }
 
     private static final String TAG = "MDB:SosPresenter";
@@ -36,6 +40,7 @@ public class SosPresenter {
     public SosPresenter(View view) { this.view = view; }
 
     public void createNewEmergency(Location location, String description) {
+
 
         Date date = new Date();
 
@@ -70,19 +75,29 @@ public class SosPresenter {
                     }
                 });
 
-//        firebaseManager.DATABASE_REFERENCE.updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
-//            @Override
-//            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-//                Log.d(TAG, "createNewEmergency:onComplete: database reference: " + databaseReference);
-//                if(databaseError != null) {
-//                    Log.d(TAG, "createNewEmergency:onComplete: error creating emergencies: " + databaseError.getMessage());
-//                    view.errorCreatingEmergency(databaseError.getMessage());
-//                } else {
-//                    view.didCreateEmergency(emergency);
-//                }
-//            }
-//        });
+    }
 
+
+    public void checkIfEmergencyExistsForCurrentUser() {
+        firebaseManager.getRefForCurrentUser().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Caller caller = dataSnapshot.getValue(Caller.class);
+                if(caller != null) {
+                    if(caller.emergency != null) {
+                        view.emergencyExistsForCurrentUser(caller.emergency);
+                        Log.d(TAG, "checkIfEmergencyExistsForCurrentUser:onDataChange: :" + caller.emergency);
+                    } else {
+                        Log.d(TAG, "checkIfEmergencyExistsForCurrentUser:onDataChange: There was no previous emergency");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "checkIfExistsAndArchiveEmergencyForCurrentUser:onCancelled: " + databaseError.getDetails());
+            }
+        });
     }
 
 }

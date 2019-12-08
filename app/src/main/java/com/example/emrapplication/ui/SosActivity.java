@@ -96,6 +96,7 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
 
         sosPresenter = new SosPresenter(this);
         userInfoPresenter = new UserInfoPresenter(this);
+        sosPresenter.checkIfEmergencyExistsForCurrentUser();
 
         descriptionEditText = findViewById(R.id.editTextEmergencyDiscription);
 
@@ -338,6 +339,10 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
         Toast.makeText(this, "Error creating emergency, please try again!\n\n error:" + message, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void emergencyExistsForCurrentUser(Emergency emergency) {
+        goToEmergencyActivity(emergency);
+    }
 
     // MARK: - Implement UerInfoPresenter Methods
 

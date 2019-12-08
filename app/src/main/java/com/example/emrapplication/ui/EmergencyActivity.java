@@ -77,6 +77,7 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
     protected void onStop() {
         super.onStop();
         locationPresenter.stopLocationUpdates();
+        //emergencyPresenter.checkIfExistsAndArchiveEmergencyForCurrentUser();
     }
 
 
@@ -142,6 +143,8 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
 
     @Override
     public void didRemoveEmergencyFromUser(Emergency emergency) {
+        emergencyPresenter.archiveEmergency(emergency);
+        emergencyPresenter.removeEmergencyFromActiveList(emergency);
         goBackToSosActivity();
     }
 
@@ -165,6 +168,15 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
 
     }
 
+    @Override
+    public void didCreateEmergency(Emergency emergency) {
+
+    }
+
+    @Override
+    public void errorCreatingEmergency(String message) {
+
+    }
 
     @Override
     public void didGetLastLocation(Location location) {
