@@ -29,6 +29,7 @@ public class EmergencyPresenter {
     public interface View {
         void didCreateEmergency(Emergency emergency);
         void errorCreatingEmergency(String message);
+        void didUpdateEmergencyStatus(String message);
         void didRetrieveEmergencyDetails(Emergency emergency);
         void didArchiveEmergency(Emergency emergency);
         //void didUpdateResponder(Responder responder);
@@ -79,10 +80,34 @@ public class EmergencyPresenter {
         }
     };
 
+    private ValueEventListener emergencyStatusListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                String status = dataSnapshot.getValue(String.class);
+                if(status != null && !status.isEmpty()){
+                    view.didUpdateEmergencyStatus(status);
+                    Log.d(TAG, "emergencyStatusListener:onDataChange: " + status);
+                } else {
+                    Log.d(TAG, "emergencyStatusListener:onDataChange: status is null!" + dataSnapshot.toString());
+                }
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+            Log.d(TAG, "emergencyStatusListener:onCancelled: " + databaseError.getDetails());
+        }
+    };
+
     public EmergencyPresenter(View view) { this.view = view; }
 
     public void getEmergencyDetailsForCurrentUser() {
         firebaseManager.getRefForCurrentUser().child(firebaseManager.EMERGENCY_REF).addValueEventListener(userEmergencyListener);
+    }
+
+    public void listenForStatusChanges() {
+        firebaseManager.getRefForCurrentUser().child(firebaseManager.EMERGENCY_REF).child("status").addValueEventListener(emergencyStatusListener);
     }
 
     public void upDateEmergencyStatusForCurrentUser(final EmergencyStatus status){

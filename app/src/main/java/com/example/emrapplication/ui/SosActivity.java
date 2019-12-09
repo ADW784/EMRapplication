@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,11 +29,14 @@ import com.example.emrapplication.R;
 import com.example.emrapplication.managers.Constants;
 import com.example.emrapplication.model.Caller;
 import com.example.emrapplication.model.Emergency;
+import com.example.emrapplication.model.EmergencyStatus;
 import com.example.emrapplication.presenters.LocationPresenter;
 import com.example.emrapplication.presenters.SosPresenter;
 import com.example.emrapplication.presenters.UserInfoPresenter;
 import com.google.android.gms.location.LocationResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Locale;
 
 public class SosActivity extends AppCompatActivity implements SosPresenter.View, UserInfoPresenter.View, LocationPresenter.LocationListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -248,6 +252,14 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
         }
     }
 
+    private void startVoiceRecognitionIntent(int requestCode) {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.ENGLISH);
+
+        startActivityForResult(intent, requestCode);
+    }
+
     // MARK: - Implement ActivityCompat.OnRequestPermissionsResultCallback Methods
 
     @Override
@@ -341,7 +353,11 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
 
     @Override
     public void emergencyExistsForCurrentUser(Emergency emergency) {
-        goToEmergencyActivity(emergency);
+        if(emergency.status.equals(EmergencyStatus.CREATED) || emergency.status.equals(EmergencyStatus.INPROGRESS)) {
+            if(emergency.id != null) {
+                goToEmergencyActivity(emergency);
+            }
+        }
     }
 
     // MARK: - Implement UerInfoPresenter Methods

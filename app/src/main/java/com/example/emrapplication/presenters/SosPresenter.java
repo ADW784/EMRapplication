@@ -84,7 +84,7 @@ public class SosPresenter {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Caller caller = dataSnapshot.getValue(Caller.class);
                 if(caller != null) {
-                    if(caller.emergency != null) {
+                    if(caller.emergency != null && caller.emergency.id != null) {
                         view.emergencyExistsForCurrentUser(caller.emergency);
                         Log.d(TAG, "checkIfEmergencyExistsForCurrentUser:onDataChange: :" + caller.emergency);
                     } else {
