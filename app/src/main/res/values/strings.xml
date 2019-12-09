@@ -21,7 +21,7 @@
     <string name="registration_error_message">Please fix errors to continue the registration process!</string>
     <string name="Button_tittle_sign_out">Sign Out</string>
     <string name="button_title_register">Register</string>
-    <string name="text_title_sos">Press Button to send S.O.S</string>
+    <string name="text_title_sos">Long press the SOS button to record a description of your emergency using voice. \n\n Tap the button to send the S.O.S</string>
     <string name="text_title_welcome">Welcome</string>
     <string name="button_tittle_edit_profile">Edit Profile</string>
     <string name="placeholder_text_enter_emergency_description">enter emergency description</string>

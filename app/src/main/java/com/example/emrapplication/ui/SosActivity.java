@@ -88,6 +88,14 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
         }
     };
 
+    View.OnLongClickListener longClickSosButtonListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            startVoiceRecognitionIntent(Constants.VOICE_RECOGNITION_REQUEST_CODE);
+            return true;
+        }
+    };
+
 
     // MARK: - Override Default Methods
 
@@ -124,6 +132,7 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
                showConfirmPopup();
             }
         });
+        imageButtonSOS.setOnLongClickListener(longClickSosButtonListener);
 
         requestLocationPermission();
 
@@ -153,6 +162,13 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
             } else {
                 Log.d(TAG, "onActivityResult: result code not ok! intent data for request check settings: " + data.getDataString());
             }
+        }
+
+        if(requestCode == Constants.VOICE_RECOGNITION_REQUEST_CODE && requestCode == RESULT_OK) {
+
+            String bestResult = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0);
+            descriptionEditText.setText(bestResult);
+
         }
     }
 
