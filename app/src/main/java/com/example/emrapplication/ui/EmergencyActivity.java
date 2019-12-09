@@ -1,10 +1,13 @@
 package com.example.emrapplication.ui;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +25,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class EmergencyActivity extends AppCompatActivity implements EmergencyPresenter.View, LocationPresenter.LocationListener {
+public class EmergencyActivity extends AppCompatActivity implements EmergencyPresenter.View, LocationPresenter.LocationListener, TextToSpeech.OnInitListener {
+
+    private static final String TAG = "MDB:EmergencyActivity";
 
     EmergencyPresenter emergencyPresenter;
     Emergency currentEmergency;
@@ -33,6 +38,8 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
     TextView descriptionTextView;
     TextView responderInfoTextView;
     Button cancelEmergencyButton;
+
+    private TextToSpeech textToSpeech;
 
     View.OnClickListener cancelEmergencyListener = new View.OnClickListener() {
         @Override
@@ -46,8 +53,11 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emergency);
 
+        textToSpeech = new TextToSpeech(this,this);
+
         emergencyPresenter = new EmergencyPresenter(this);
         emergencyPresenter.getEmergencyDetailsForCurrentUser();
+        emergencyPresenter.listenForStatusChanges();
 
         locationPresenter = new LocationPresenter(this, this);
         locationPresenter.checkLocationSettingsAndStartUpdates(this);
@@ -74,6 +84,14 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
     protected void onStop() {
         super.onStop();
         locationPresenter.stopLocationUpdates();
+        //emergencyPresenter.checkIfExistsAndArchiveEmergencyForCurrentUser();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Log.d(TAG, "onBackPressed: Override this to do nothing.");
     }
 
     private void updateUI(Emergency emergency) {
@@ -132,6 +150,8 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
 
     @Override
     public void didRemoveEmergencyFromUser(Emergency emergency) {
+        emergencyPresenter.archiveEmergency(emergency);
+        emergencyPresenter.removeEmergencyFromActiveList(emergency);
         goBackToSosActivity();
     }
 
@@ -155,6 +175,21 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
 
     }
 
+    @Override
+    public void didCreateEmergency(Emergency emergency) {
+
+    }
+
+    @Override
+    public void errorCreatingEmergency(String message) {
+
+    }
+
+    @Override
+    public void didUpdateEmergencyStatus(String message) {
+
+        textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null);
+    }
 
     @Override
     public void didGetLastLocation(Location location) {
@@ -175,6 +210,17 @@ public class EmergencyActivity extends AppCompatActivity implements EmergencyPre
 
     @Override
     public void didUpdateLocation(LocationResult locationResult) {
+
+    }
+
+    @Override
+    public void onInit(int status) {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
     }
 }

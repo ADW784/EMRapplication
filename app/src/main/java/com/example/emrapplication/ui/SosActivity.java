@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,11 +29,14 @@ import com.example.emrapplication.R;
 import com.example.emrapplication.managers.Constants;
 import com.example.emrapplication.model.Caller;
 import com.example.emrapplication.model.Emergency;
+import com.example.emrapplication.model.EmergencyStatus;
 import com.example.emrapplication.presenters.LocationPresenter;
 import com.example.emrapplication.presenters.SosPresenter;
 import com.example.emrapplication.presenters.UserInfoPresenter;
 import com.google.android.gms.location.LocationResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Locale;
 
 public class SosActivity extends AppCompatActivity implements SosPresenter.View, UserInfoPresenter.View, LocationPresenter.LocationListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -84,6 +88,14 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
         }
     };
 
+    View.OnLongClickListener longClickSosButtonListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            startVoiceRecognitionIntent(Constants.VOICE_RECOGNITION_REQUEST_CODE);
+            return false;
+        }
+    };
+
 
     // MARK: - Override Default Methods
 
@@ -96,6 +108,7 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
 
         sosPresenter = new SosPresenter(this);
         userInfoPresenter = new UserInfoPresenter(this);
+        sosPresenter.checkIfEmergencyExistsForCurrentUser();
 
         descriptionEditText = findViewById(R.id.editTextEmergencyDiscription);
 
@@ -119,6 +132,7 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
                showConfirmPopup();
             }
         });
+        imageButtonSOS.setOnLongClickListener(longClickSosButtonListener);
 
         requestLocationPermission();
 
@@ -140,6 +154,7 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         // Check which request we're responding to
         if (requestCode == Constants.REQUEST_CHECK_SETTINGS) {
             // Make sure the request was successful
@@ -149,6 +164,20 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
                 Log.d(TAG, "onActivityResult: result code not ok! intent data for request check settings: " + data.getDataString());
             }
         }
+
+        if(requestCode == Constants.VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
+
+            String bestResult = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0);
+            descriptionEditText.setText(bestResult);
+            Log.d(TAG, "onActivityResult: voice recognition intent:best Result: " + bestResult);
+
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Log.d(TAG, "onBackPressed: Override this to do nothing.");
     }
 
     // MARK: - Class Methods
@@ -157,7 +186,7 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             if(FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
-                signoutButton.setVisibility(View.GONE);
+                signoutButton.setVisibility(View.VISIBLE);
                 buttonEditProfile.setVisibility(View.GONE);
                 registerButton.setVisibility(View.VISIBLE);
             } else {
@@ -239,6 +268,14 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
             Intent intent = new Intent(SosActivity.this, LoginActivity.class);
             startActivity(intent);
         }
+    }
+
+    private void startVoiceRecognitionIntent(int requestCode) {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.ENGLISH);
+
+        startActivityForResult(intent, requestCode);
     }
 
     // MARK: - Implement ActivityCompat.OnRequestPermissionsResultCallback Methods
@@ -332,6 +369,14 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
         Toast.makeText(this, "Error creating emergency, please try again!\n\n error:" + message, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void emergencyExistsForCurrentUser(Emergency emergency) {
+        if(emergency.status.equals(EmergencyStatus.CREATED) || emergency.status.equals(EmergencyStatus.INPROGRESS)) {
+            if(emergency.id != null) {
+                goToEmergencyActivity(emergency);
+            }
+        }
+    }
 
     // MARK: - Implement UerInfoPresenter Methods
 

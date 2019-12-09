@@ -25,7 +25,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     EditText password;
     EditText confirmPassword;
 
-    private static final String TAG = "RegistrationActivity";
+    private static final String TAG = "MDB:RegistrationActivity";
 
     private RegistrationPresenter registrationPresenter;
 
@@ -48,7 +48,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         password = findViewById(R.id.editTextPassword);
         confirmPassword = findViewById(R.id.editTextConfirmPassword);
 
-        setTitle("RegistrationActivity");
+        setTitle("Registration");
 
     }
 

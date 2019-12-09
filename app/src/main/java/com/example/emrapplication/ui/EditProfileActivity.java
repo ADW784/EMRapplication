@@ -61,6 +61,8 @@ public class EditProfileActivity extends AppCompatActivity implements UserInfoPr
         userInfoPresenter = new UserInfoPresenter(this);
         userInfoPresenter.getCurrentUser();
 
+        setTitle("Edit Profile");
+
     }
 
 
