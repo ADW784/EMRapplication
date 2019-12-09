@@ -92,7 +92,7 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
         @Override
         public boolean onLongClick(View v) {
             startVoiceRecognitionIntent(Constants.VOICE_RECOGNITION_REQUEST_CODE);
-            return true;
+            return false;
         }
     };
 
@@ -154,6 +154,7 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         // Check which request we're responding to
         if (requestCode == Constants.REQUEST_CHECK_SETTINGS) {
             // Make sure the request was successful
@@ -164,10 +165,11 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
             }
         }
 
-        if(requestCode == Constants.VOICE_RECOGNITION_REQUEST_CODE && requestCode == RESULT_OK) {
+        if(requestCode == Constants.VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
 
             String bestResult = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0);
             descriptionEditText.setText(bestResult);
+            Log.d(TAG, "onActivityResult: voice recognition intent:best Result: " + bestResult);
 
         }
     }
@@ -184,7 +186,7 @@ public class SosActivity extends AppCompatActivity implements SosPresenter.View,
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             if(FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
-                signoutButton.setVisibility(View.GONE);
+                signoutButton.setVisibility(View.VISIBLE);
                 buttonEditProfile.setVisibility(View.GONE);
                 registerButton.setVisibility(View.VISIBLE);
             } else {
